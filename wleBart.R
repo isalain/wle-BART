@@ -1,7 +1,7 @@
 # Western Lake Erie - BART analysis
 # Creator: Alain Isabwe
 # Created on: 9/12/2024
-# Updated on: 1/28/2024
+# Updated on: 1/28/2025
 
 ###############################
 # 0. Load the necessary libraries
@@ -72,7 +72,6 @@ for (i in 1:length(SelectCol4)) {
 }
 RawData4 <- subset(RawData4, select = SelectCol4)
 
-
 # Combine all datasets and filter for surface samples and main stations
 RawData <- rbind(RawData1, RawData2, RawData3, RawData4)
 RawData$Date <- as.Date(RawData$Date, format = "%m/%d/%Y")
@@ -87,15 +86,17 @@ RawData<- RawData[RawData$Category == "Surface", ]
 # Chla
 head(sort(RawData$Chla[!is.na(RawData$Chla)], decreasing = TRUE))
 head(sort(RawData$TP[!is.na(RawData$TP)], decreasing = TRUE))
+
+# Removing the "<"
 cols_to_replace <- c("Beam_att", "SRP", "NH3", "NOx")
 
 for (col in cols_to_replace) {
   RawData[[col]] <- as.numeric(gsub("<", "", RawData[[col]]))
 }
-str(RawData)
 
 CleanData <- subset(RawData, 
                     Chla < 1000)
+
 ######################################
 # 2. Figure 2 Trends in the data with LOESS smoothing over julian days
 #####################################
